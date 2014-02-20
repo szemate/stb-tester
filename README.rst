@@ -299,7 +299,7 @@ The following functions are available:
 
 .. <start python docs>
 
-press(key, interpress_delay_secs=0.0)
+press(key, interpress_delay_secs=None)
     Send the specified key-press to the system under test.
 
     The mechanism used to send the key-press depends on what you've configured
@@ -333,7 +333,7 @@ wait_for_match(image, timeout_secs=10, consecutive_matches=1, noise_threshold=No
     Specify `match_parameters` to customise the image matching algorithm. See
     the documentation for `MatchParameters` for details.
 
-press_until_match(key, image, interval_secs=3, noise_threshold=None, max_presses=10, match_parameters=None)
+press_until_match(key, image, interval_secs=None, noise_threshold=None, max_presses=None, match_parameters=None)
     Calls `press` as many times as necessary to find the specified `image`.
 
     Returns `MatchResult` when `image` is found.
@@ -496,7 +496,7 @@ save_frame(image, filename)
 get_frame()
     Returns an OpenCV image of the current video frame.
 
-is_screen_black(frame, mask=None, threshold=10)
+is_screen_black(frame, mask=None, threshold=None)
     Check for the presence of a black screen in a video frame.
 
     `frame` is the video frame to check, in OpenCV format (for example as
