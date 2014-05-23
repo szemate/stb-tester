@@ -1,6 +1,6 @@
 Name: stb-tester
 Version: 0.18
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Automated user interface testing for set-top boxes
 Group: Development/Tools
 URL: http://stb-tester.com
@@ -15,6 +15,7 @@ Requires: gstreamer-plugins-bad-free
 Requires: gstreamer-plugins-base
 Requires: gstreamer-plugins-good
 Requires: gstreamer-python
+Requires: net-snmp-utils
 Requires: opencv
 Requires: opencv-python
 Requires: openssh-clients
