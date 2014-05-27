@@ -132,6 +132,14 @@ parallel := $(shell \
     parallel --version 2>/dev/null | grep -q GNU && \
     echo parallel --gnu || echo xargs)
 
+stb-tester.rpm: extra/stb-tester.spec dist
+	mkdir -p $(rpm_source_dir)
+	rm -rf $(rpm_source_dir)/*
+	mv stb-tester-$(VERSION).tar.gz $(rpm_source_dir)
+	rpmbuild --define "_topdir $(rpm_topdir)" -bb "$<"
+rpm_topdir := $(HOME)/rpmbuild
+rpm_source_dir := $(rpm_topdir)/SOURCES
+rpm_target_dir := $(rpm_topdir)/RPMS
 
 # Can only be run from within a git clone of stb-tester or VERSION (and the
 # list of files) won't be set correctly.
