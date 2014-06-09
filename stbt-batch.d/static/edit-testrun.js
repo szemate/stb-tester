@@ -43,6 +43,9 @@ $(document).ready(function() {
         return false;
     });
     $("#permalink").after(del);
+
+    $("p").last().after(
+        "<p><a id='download' href='logs.zip'>[Download all]</a></p>");
 });
 
 function truncate(str, len) {

@@ -83,20 +83,7 @@ class Run(object):
 
         if self.exit_status != "still running":
             self.files = sorted([
-                basename(x) for x in glob.glob(rundir + "/*")
-                if basename(x) not in [
-                    "duration",
-                    "exit-status",
-                    "extra-columns",
-                    "failure-reason",
-                    "git-commit",
-                    "test-args",
-                    "test-name",
-                ]
-                and not x.endswith(".png")
-                and not x.endswith(".manual")
-                and not basename(x).startswith("index.html")
-            ])
+                basename(x) for x in glob.glob(rundir + "/*") if is_logfile(x)])
             self.images = sorted([
                 basename(x) for x in glob.glob(rundir + "/*.png")])
 
@@ -137,6 +124,22 @@ class Run(object):
         except ValueError:
             s = 0
         return "%02d:%02d:%02d" % (s / 3600, (s % 3600) / 60, s % 60)
+
+
+def is_logfile(f):
+    return (
+        basename(f) not in [
+            "duration",
+            "exit-status",
+            "extra-columns",
+            "failure-reason",
+            "git-commit",
+            "test-args",
+            "test-name",
+        ]
+        and not f.endswith(".png")
+        and not f.endswith(".manual")
+        and not basename(f).startswith("index.html"))
 
 
 def die(message):

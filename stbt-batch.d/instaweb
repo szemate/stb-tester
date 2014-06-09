@@ -14,10 +14,15 @@ import mimetypes
 import os
 import subprocess
 import sys
+import tempfile
+import zipfile
 from os.path import abspath, basename, dirname, isdir, isfile, normpath
 
-from flask import (abort, Flask, redirect, render_template, request,
+from flask import (abort, Flask, redirect, render_template, request, send_file,
                    send_from_directory)
+
+from report import is_logfile
+
 
 app = Flask(__name__, instance_path=os.getcwd())
 
@@ -87,6 +92,17 @@ def hide_testrun(testrun):
         "--html-only",
         os.path.join(dirname(d), "index.html")])
     return ""
+
+
+@app.route("/<path:testrun>/logs.zip")
+def package_logfiles(testrun):
+    d = testrun_directory(testrun)
+    with tempfile.NamedTemporaryFile(mode="w+b", suffix=".zip") as file_:
+        with zipfile.ZipFile(file_.name, mode="w") as zip_:
+            for log in [f for f in os.listdir(d) if is_logfile(f)]:
+                zip_.write(os.path.join(d, log), arcname=log)
+        return send_file(
+            file_.name, as_attachment=True, attachment_filename="logs.zip")
 
 
 def testrun_directory(path):
