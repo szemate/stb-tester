@@ -1,11 +1,11 @@
 Name: stb-tester
 Version: 0.18
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Automated user interface testing for set-top boxes
 Group: Development/Tools
 URL: http://stb-tester.com
 License: LGPLv2.1+
-Source: %{name}-%{version}-aten.tar.gz
+Source: %{name}-%{version}-youview.tar.gz
 BuildArch: noarch
 BuildRequires: python-docutils
 
@@ -32,7 +32,7 @@ Test scripts are written in Python and can be generated with the `stbt record`
 command.
 
 %prep
-%setup -n %{_builddir}/%{name}-%{version}-aten
+%setup -n %{_builddir}/%{name}-%{version}-youview
 
 %build
 make prefix=/usr sysconfdir=/etc
