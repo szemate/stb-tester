@@ -1,6 +1,6 @@
 Name: stb-tester
 Version: 0.18
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Automated user interface testing for set-top boxes
 Group: Development/Tools
 URL: http://stb-tester.com
