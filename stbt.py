@@ -1041,7 +1041,7 @@ class Display:
                 save_video += ".webm"
             debug("Saving video to '%s'" % save_video)
             video_pipeline = (
-                "t. ! queue leaky=downstream ! ffmpegcolorspace ! "
+                "t. ! queue leaky=downstream ! ffmpegcolorspace ! videorate ! "
                 "vp8enc speed=7 ! webmmux ! filesink location=%s" % save_video)
         else:
             video_pipeline = ""
