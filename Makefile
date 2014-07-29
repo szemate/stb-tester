@@ -133,6 +133,7 @@ parallel := $(shell \
     echo parallel --gnu || echo xargs)
 
 stb-tester.rpm: extra/stb-tester.spec dist
+	mkdir -p $(rpm_source_dir)
 	mv stb-tester-$(VERSION).tar.gz $(rpm_source_dir)
 	rpmbuild --define "_topdir $(rpm_topdir)" -bb "$<"
 rpm_topdir := $(HOME)/rpmbuild
