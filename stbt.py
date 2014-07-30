@@ -143,6 +143,9 @@ def press(key, interpress_delay_secs=None):
     _control.press(key)
     _control.time_of_last_press = (  # pylint:disable=W0201
         datetime.datetime.now())
+
+    now = _control.time_of_last_press.strftime("%H:%M:%S:%f")[:-4]
+    key = '{0}: {1}'.format(now, key)
     draw_text(key, duration_secs=3)
 
 
@@ -1173,21 +1176,26 @@ class Display:
             if (gst_buffer.timestamp > timeout):
                 self.video_debug.remove((text, duration, timeout))
 
-        if opencv_image is None and len(self.video_debug) == 0:
-            self.appsrc.emit("push-buffer", gst_buffer)
-        else:
-            if opencv_image is None:
-                opencv_image = gst_to_opencv(gst_buffer)
-            for i in range(len(self.video_debug)):
-                text, _, _ = self.video_debug[len(self.video_debug) - i - 1]
-                cv2.putText(
-                    opencv_image, text, (10, (i + 1) * 30),
-                    cv2.FONT_HERSHEY_TRIPLEX, fontScale=1.0,
-                    color=(255, 255, 255))
-            newbuf = gst.Buffer(opencv_image.data)
-            newbuf.set_caps(gst_buffer.get_caps())
-            newbuf.timestamp = gst_buffer.timestamp
-            self.appsrc.emit("push-buffer", newbuf)
+        if opencv_image is None:
+            opencv_image = gst_to_opencv(gst_buffer)
+
+        now = datetime.datetime.now().strftime("%H:%M:%S:%f")[:-4]
+
+        cv2.putText(
+            opencv_image, now, (10, 30), cv2.FONT_HERSHEY_TRIPLEX,
+            fontScale=1.0, color=(255, 255, 255))
+
+        for i in range(1, len(self.video_debug) + 1):
+            text, _, _ = self.video_debug[len(self.video_debug) - i]
+            cv2.putText(
+                opencv_image, text, (10, (i + 1) * 30),
+                cv2.FONT_HERSHEY_TRIPLEX, fontScale=1.0,
+                color=(255, 255, 255))
+
+        newbuf = gst.Buffer(opencv_image.data)
+        newbuf.set_caps(gst_buffer.get_caps())
+        newbuf.timestamp = gst_buffer.timestamp
+        self.appsrc.emit("push-buffer", newbuf)
 
     def on_error(self, _bus, message):
         assert message.type == gst.MESSAGE_ERROR
