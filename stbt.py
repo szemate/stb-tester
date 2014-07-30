@@ -1182,14 +1182,14 @@ class Display:
         now = datetime.datetime.now().strftime("%H:%M:%S:%f")[:-4]
 
         cv2.putText(
-            opencv_image, now, (10, 30), cv2.FONT_HERSHEY_TRIPLEX,
+            opencv_image, now, (10, 30), cv2.FONT_HERSHEY_DUPLEX,
             fontScale=1.0, color=(255, 255, 255))
 
         for i in range(1, len(self.video_debug) + 1):
             text, _, _ = self.video_debug[len(self.video_debug) - i]
             cv2.putText(
                 opencv_image, text, (10, (i + 1) * 30),
-                cv2.FONT_HERSHEY_TRIPLEX, fontScale=1.0,
+                cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0,
                 color=(255, 255, 255))
 
         newbuf = gst.Buffer(opencv_image.data)
