@@ -1,0 +1,154 @@
+stbt-run: Arguments:
+control: irnetbox:testaut-2-switch-pc.dev.youview.co.uk:1:/home/szemate/uitests/config/humax.irnetbox.conf
+args: []
+verbose: 1
+source_pipeline: rtmpsrc location=rtmp://testaut-2-pc-1/live/testaut-2-stb-1\ live=1
+script: /home/szemate/uitests/test_team/reboot.py
+restart_source: False
+sink_pipeline: xvimagesink sync=false
+save_video: video
+stbt-run: Saving video to 'video.webm'
+ERROR: rtmp server sent error
+ERROR: rtmp server sent error
+stbt-run: source pipeline: rtmpsrc location=rtmp://testaut-2-pc-1/live/testaut-2-stb-1\ live=1 ! queue name=_stbt_user_data_queue max-size-buffers=0     max-size-bytes=0 max-size-time=10000000000 ! decodebin ! queue name=_stbt_raw_frames_queue max-size-buffers=2 ! videoconvert ! video/x-raw,format=BGR ! identity ! appsink name=appsink max-buffers=1 drop=false sync=true emit-signals=true caps=video/x-raw,format=BGR
+stbt-run: sink pipeline: appsrc name=appsrc format=time caps=video/x-raw,format=(string)BGR ! tee name=t t. ! queue leaky=downstream ! videoconvert ! vp8enc cpu-used=6 min_quantizer=32 max_quantizer=32 ! webmmux ! filesink location=video.webm t. ! queue leaky=downstream ! videoconvert ! xvimagesink sync=false
+stbt-run: IRNetBoxRemote: Connecting to testaut-2-switch-pc.dev.youview.co.uk
+stbt-run: IRNetBoxRemote: Connected to testaut-2-switch-pc.dev.youview.co.uk
+stbt-run: power.cold_reboot: Attempting to reboot STB via SSH.
+stbt-run: power.cold_reboot: Failed to reboot STB via SSH because: Failed to get STB IP address. Neither 'global.box_ip' nor 'global.network_interface' specified in config file.
+stbt-run: power.cold_reboot: Attempting to reboot STB via PDU.
+power: Executing command 'off'
+power: 
+power: Power supply of the STB has been turned off
+power: Executing command 'on'
+power: 
+power: Power supply of the STB has been turned on
+stbt-run: Pressed POWER
+stbt-run: power.cold_reboot: Rebooted STB via PDU.
+stbt-run: power.cold_reboot: Waiting for STB to finish booting.
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: No match found. Closest match: MatchResult(timestamp=26611000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png)
+stbt-run: timed out: 26731000000 - 26611000000 > 0
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: No match found. Closest match: MatchResult(timestamp=27411000000, match=False, position=Position(x=1064, y=940), first_pass_result=0.615302741528, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=28491000000, match=False, position=Position(x=1064, y=940), first_pass_result=0.615302741528, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=29211000000, match=False, position=Position(x=1064, y=940), first_pass_result=0.615302741528, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: warning: Got EOS from source pipeline
+stbt-run: warning: Attempting to recover from video loss: Stopping source pipeline and waiting 5s...
+stbt-run: No match found. Closest match: MatchResult(timestamp=29251000000, match=False, position=Position(x=1064, y=940), first_pass_result=0.615302741528, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=29331000000, match=False, position=Position(x=1064, y=940), first_pass_result=0.615302741528, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: warning: Restarting source pipeline...
+stbt-run: warning: Restarted source pipeline
+ERROR: rtmp server sent error
+ERROR: rtmp server sent error
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: No match found. Closest match: MatchResult(timestamp=934000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1034000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1134000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1200000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1300000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1367000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1434000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1500000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1567000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1667000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1734000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1800000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1867000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=1967000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2034000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2100000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2167000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2267000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2334000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2400000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2467000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2567000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2634000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2700000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2767000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2867000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685773998499, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=2934000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3000000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3067000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3167000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3234000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3300000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3400000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3467000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3534000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947567225, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3600000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3700000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3767000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3834000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3900000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=3967000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4067000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4134000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4200000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4300000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4367000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4434000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4500000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4600000000, match=False, position=Position(x=1725, y=1021), first_pass_result=0.685947090387, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4667000000, match=False, position=Position(x=836, y=448), first_pass_result=0.465101778507, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4734000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4767000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4834000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4867000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=4934000000, match=False, position=Position(x=0, y=0), first_pass_result=0.0, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=5000000000, match=False, position=Position(x=0, y=62), first_pass_result=0.616387575865, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=5034000000, match=False, position=Position(x=0, y=62), first_pass_result=0.616387575865, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: No match found. Closest match: MatchResult(timestamp=5067000000, match=False, position=Position(x=0, y=67), first_pass_result=0.616534113884, frame=1920x1080x3, image=/home/szemate/uitests/library/images/guide.png)
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+stbt-run: Searching for /home/szemate/uitests/library/ui/images/setupwizard/state-welcome.png
+stbt-run: Pressed MENU
+stbt-run: Searching for /home/szemate/uitests/library/images/guide.png
+Traceback (most recent call last):
+  File "/home/szemate/drothlis-stb-tester/stbt-run", line 49, in <module>
+    execfile(args.script)
+  File "/home/szemate/uitests/test_team/reboot.py", line 3, in <module>
+    power.cold_reboot()
+  File "/home/szemate/uitests/library/power.py", line 45, in cold_reboot
+    complete_bootup()
+  File "/home/szemate/uitests/library/power.py", line 61, in complete_bootup
+    return stbt.wait_for_match("images/guide.png", timeout_secs=6)
+  File "/home/szemate/drothlis-stb-tester/stbt.py", line 596, in wait_for_match
+    image, timeout_secs, match_parameters=match_parameters):
+  File "/home/szemate/drothlis-stb-tester/stbt.py", line 425, in detect_match
+    for sample in _display.gst_samples(timeout_secs):
+  File "/home/szemate/drothlis-stb-tester/stbt.py", line 1512, in gst_samples
+    sample = self.get_sample(max(10, timeout_secs))
+  File "/home/szemate/drothlis-stb-tester/stbt.py", line 1494, in get_sample
+    raise NoVideo("No video")
+NoVideo: No video
+FAIL: /home/szemate/uitests/test_team/reboot.py: NoVideo: No video
