@@ -1040,9 +1040,12 @@ class Display:
             if not save_video.endswith(".webm"):
                 save_video += ".webm"
             debug("Saving video to '%s'" % save_video)
+            if os.path.isfile(save_video):
+                os.unlink(save_video)
             video_pipeline = (
                 "t. ! queue leaky=downstream ! ffmpegcolorspace ! videorate ! "
-                "vp8enc speed=7 ! webmmux ! filesink location=%s" % save_video)
+                "vp8enc speed=7 ! webmmux ! "
+                "filesink append=true location=%s" % save_video)
         else:
             video_pipeline = ""
 
@@ -1229,6 +1232,7 @@ class Display:
     def restart_source(self, *_args):
         warn("Attempting to recover from video loss: "
              "Stopping source pipeline and waiting 5s...")
+        self.sink_pipeline.set_state(gst.STATE_NULL)
         self.source_pipeline.set_state(gst.STATE_NULL)
         self.source_pipeline = None
         GObjectTimeout(5, self.start_source).start()
@@ -1237,8 +1241,12 @@ class Display:
     def start_source(self):
         warn("Restarting source pipeline...")
         self.create_source_pipeline()
-        self.source_pipeline.set_state(gst.STATE_PLAYING)
-        warn("Restarted source pipeline")
+        if self.source_pipeline.set_state(gst.STATE_PLAYING) != \
+                gst.STATE_CHANGE_FAILURE:
+            self.sink_pipeline.set_state(gst.STATE_PLAYING)
+            warn("Restarted source pipeline")
+        else:
+            warn("Failed to restart source pipeline")
         if self.restart_source_enabled:
             self.underrun_timeout.start()
         return False  # stop the timeout from running again
