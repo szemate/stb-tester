@@ -1040,14 +1040,14 @@ class Display:
             if not save_video.endswith(".webm"):
                 save_video += ".webm"
             debug("Saving video to '%s'" % save_video)
-            if os.path.isfile(save_video):
-                os.unlink(save_video)
             video_pipeline = (
                 "t. ! queue leaky=downstream ! ffmpegcolorspace ! videorate ! "
                 "vp8enc speed=7 ! webmmux ! "
-                "filesink append=true location=%s" % save_video)
+                "filesink name=_fs location=%s" % save_video)
         else:
             video_pipeline = ""
+        self.save_video = save_video
+        self.video_file_index = 0
 
         sink_pipeline_description = " ".join([
             "appsrc name=appsrc !",
@@ -1243,6 +1243,7 @@ class Display:
         self.create_source_pipeline()
         if self.source_pipeline.set_state(gst.STATE_PLAYING) != \
                 gst.STATE_CHANGE_FAILURE:
+            self.start_new_video_file()
             self.sink_pipeline.set_state(gst.STATE_PLAYING)
             warn("Restarted source pipeline")
         else:
@@ -1250,6 +1251,15 @@ class Display:
         if self.restart_source_enabled:
             self.underrun_timeout.start()
         return False  # stop the timeout from running again
+
+    def start_new_video_file(self):
+        filesink = self.sink_pipeline.get_by_name("_fs")
+        if filesink:
+            self.video_file_index += 1
+            video_path, video_ext = os.path.splitext(self.save_video)
+            filesink.set_property(
+                "location", "%s%d%s" % (
+                    video_path, self.video_file_index, video_ext))
 
     def teardown(self):
         if self.source_pipeline:
