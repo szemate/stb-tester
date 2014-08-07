@@ -1266,7 +1266,12 @@ class Display:
     def start_new_video_file(self):
         filesink = self.sink_pipeline.get_by_name("_fs")
         if filesink:
-            self.video_file_index += 1
+            last_video = filesink.get_property("location")
+            if os.path.isfile(last_video):
+                if os.stat(last_video).st_size > 0:
+                    self.video_file_index += 1
+                else:
+                    os.unlink(last_video)
             video_path, video_ext = os.path.splitext(self.save_video)
             filesink.set_property(
                 "location", "%s%d%s" % (
