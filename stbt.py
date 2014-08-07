@@ -1020,6 +1020,7 @@ class Display:
         self.source_pipeline = None
         self.start_timestamp = None
         self.underrun_timeout = None
+        self.start_source_timeout = None
         self.video_debug = []
 
         self.restart_source_enabled = restart_source
@@ -1237,16 +1238,19 @@ class Display:
             ddebug("running: no outstanding underrun timers; ignoring")
 
     def restart_source(self, *_args):
-        warn("Attempting to recover from video loss: "
-             "Stopping source pipeline and waiting 5s...")
-        self.sink_pipeline.set_state(gst.STATE_NULL)
-        self.source_pipeline.set_state(gst.STATE_NULL)
-        self.source_pipeline = None
-        GObjectTimeout(5, self.start_source).start()
+        if not self.start_source_timeout:
+            warn("Attempting to recover from video loss: "
+                 "Stopping source pipeline and waiting 5s...")
+            self.sink_pipeline.set_state(gst.STATE_NULL)
+            self.source_pipeline.set_state(gst.STATE_NULL)
+            self.source_pipeline = None
+            self.start_source_timeout = GObjectTimeout(5, self.start_source)
+            self.start_source_timeout.start()
         return False  # stop the timeout from running again
 
     def start_source(self):
         warn("Restarting source pipeline...")
+        self.start_source_timeout = None
         self.create_source_pipeline()
         if self.source_pipeline.set_state(gst.STATE_PLAYING) != \
                 gst.STATE_CHANGE_FAILURE:
