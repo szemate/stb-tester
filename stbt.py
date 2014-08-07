@@ -1065,6 +1065,13 @@ class Display:
         sink_bus.add_signal_watch()
         self.appsrc = self.sink_pipeline.get_by_name("appsrc")
 
+        # Make all decodebins in the pipeline handle asynchronous state changes
+        for decodebin in [
+                e for e in self.source_pipeline.elements()
+                if e.get_factory() == gst.element_factory_find("decodebin2")]:
+            ddebug("init: %s: set async-handling=true" % decodebin.get_name())
+            decodebin.set_property("async-handling", "true")
+
         debug("source pipeline: %s" % self.source_pipeline_description)
         debug("sink pipeline: %s" % sink_pipeline_description)
 
