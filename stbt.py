@@ -1086,13 +1086,12 @@ class Display:
         appsink = self.source_pipeline.get_by_name("appsink")
         appsink.connect("new-buffer", self.on_new_buffer)
 
-        if self.restart_source_enabled:
-            # Handle loss of video (but without end-of-stream event) from the
-            # Hauppauge HDPVR capture device.
-            source_queue = self.source_pipeline.get_by_name("q")
-            self.start_timestamp = None
-            source_queue.connect("underrun", self.on_underrun)
-            source_queue.connect("running", self.on_running)
+        # Handle loss of video (but without end-of-stream event) from the
+        # Hauppauge HDPVR capture device.
+        source_queue = self.source_pipeline.get_by_name("q")
+        self.start_timestamp = None
+        source_queue.connect("underrun", self.on_underrun)
+        source_queue.connect("running", self.on_running)
 
     def get_frame(self, timeout_secs=10):
         try:
@@ -1155,13 +1154,14 @@ class Display:
             ddebug("glib thread: new buffer (timestamp=%s). Queue.qsize: %d" %
                    (buffer_or_exception.timestamp, self.last_buffer.qsize()))
 
-        # Drop old frame
+        self.drop_old_frame()
+        self.last_buffer.put_nowait(buffer_or_exception)
+
+    def drop_old_frame(self):
         try:
             self.last_buffer.get_nowait()
         except Queue.Empty:
             pass
-
-        self.last_buffer.put_nowait(buffer_or_exception)
 
     def draw_text(self, text, duration_secs):
         """Draw the specified text on the output video."""
@@ -1216,8 +1216,8 @@ class Display:
         if self.underrun_timeout:
             ddebug("underrun: I already saw a recent underrun; ignoring")
         else:
-            ddebug("underrun: scheduling 'restart_source' in 2s")
-            self.underrun_timeout = GObjectTimeout(2, self.restart_source)
+            ddebug("underrun: scheduling 'handle_underrun' in 2s")
+            self.underrun_timeout = GObjectTimeout(2, self.handle_underrun)
             self.underrun_timeout.start()
 
     def on_running(self, _element):
@@ -1228,7 +1228,13 @@ class Display:
         else:
             ddebug("running: no outstanding underrun timers; ignoring")
 
-    def restart_source(self, *_args):
+    def handle_underrun(self, *_args):
+        self.drop_old_frame()
+        ddebug("undrrun: dropped the last frame")
+        if self.restart_source_enabled:
+            self.restart_source()
+
+    def restart_source(self):
         warn("Attempting to recover from video loss: "
              "Stopping source pipeline and waiting 5s...")
         self.source_pipeline.set_state(gst.STATE_NULL)
