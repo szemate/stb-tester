@@ -1021,9 +1021,11 @@ class Display:
         self.lock = threading.RLock()  # Held by whoever is consuming frames
         self.last_buffer = Queue.Queue(maxsize=1)
         self.source_pipeline = None
-        self.start_timestamp = None
         self.underrun_timeout = None
         self.video_debug = []
+        self.timestamp_offset = 0
+        self.last_timestamp = 0
+        self.last_buffer_time = 0
 
         self.restart_source_enabled = restart_source
 
@@ -1093,7 +1095,6 @@ class Display:
         # Handle loss of video (but without end-of-stream event) from the
         # Hauppauge HDPVR capture device.
         source_queue = self.source_pipeline.get_by_name("q")
-        self.start_timestamp = None
         source_queue.connect("underrun", self.on_underrun)
         source_queue.connect("running", self.on_running)
 
@@ -1112,7 +1113,7 @@ class Display:
         return gst_buffer
 
     def frames(self, timeout_secs):
-        self.start_timestamp = None
+        start_timestamp = None
 
         with self.lock:
             while True:
@@ -1122,12 +1123,11 @@ class Display:
                 timestamp = buf.timestamp
 
                 if timeout_secs is not None:
-                    if not self.start_timestamp:
-                        self.start_timestamp = timestamp
-                    if (timestamp - self.start_timestamp > timeout_secs * 1e9):
+                    if not start_timestamp:
+                        start_timestamp = timestamp
+                    if (timestamp - start_timestamp > timeout_secs * 1e9):
                         debug("timed out: %d - %d > %d" % (
-                            timestamp, self.start_timestamp,
-                            timeout_secs * 1e9))
+                            timestamp, start_timestamp, timeout_secs * 1e9))
                         return
 
                 image = gst_to_opencv(buf)
@@ -1138,6 +1138,9 @@ class Display:
 
     def on_new_buffer(self, appsink):
         buf = appsink.emit("pull-buffer")
+        buf.timestamp += self.timestamp_offset
+        self.last_timestamp = buf.timestamp
+        self.last_buffer_time = time.time()
         self.tell_user_thread(buf)
         if self.lock.acquire(False):  # non-blocking
             try:
@@ -1234,7 +1237,6 @@ class Display:
 
     def handle_underrun(self, *_args):
         self.drop_old_frame()
-        ddebug("undrrun: dropped the last frame")
         if self.restart_source_enabled:
             self.restart_source()
 
@@ -1250,6 +1252,8 @@ class Display:
     def start_source(self):
         warn("Restarting source pipeline...")
         self.create_source_pipeline()
+        self.timestamp_offset = long(
+            self.last_timestamp + (time.time() - self.last_buffer_time) * 1e9)
         self.source_pipeline.set_state(gst.STATE_PLAYING)
         self.sink_pipeline.set_state(gst.STATE_PLAYING)
         warn("Restarted source pipeline")

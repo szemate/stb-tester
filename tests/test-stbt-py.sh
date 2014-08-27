@@ -400,3 +400,13 @@ test_that_press_reads_default_delay_from_stbt_conf() {
 	EOF
     STBT_CONFIG_FILE="$PWD/stbt.conf" stbt-run -v --control none test.py
 }
+
+test_that_restart_source_doesnt_increase_timeout() {
+    cat > test.py <<-EOF &&
+	import stbt
+	for i, _ in enumerate(stbt.frames(timeout_secs=10)):
+	    if i == 75:  # ~3 secs
+	        stbt._display.restart_source()
+	EOF
+    timeout 12s stbt-run -v test.py || fail "Exceeded the expected timeout"
+}
