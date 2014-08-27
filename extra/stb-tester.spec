@@ -10,6 +10,7 @@ BuildArch: noarch
 BuildRequires: python-docutils
 
 Requires: curl
+Requires: ffmpeg
 Requires: gstreamer
 Requires: gstreamer-plugins-bad-free
 Requires: gstreamer-plugins-base

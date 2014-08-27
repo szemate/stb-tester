@@ -1039,13 +1039,17 @@ class Display:
             appsink])
         self.create_source_pipeline()
 
-        if save_video:
-            if not save_video.endswith(".webm"):
-                save_video += ".webm"
-            debug("Saving video to '%s'" % save_video)
+        self.video_file = save_video
+        if self.video_file:
+            if not self.video_file.endswith(".webm"):
+                self.video_file += ".webm"
+            debug("Saving video to '%s'" % self.video_file)
+            if os.path.isfile(self.video_file):
+                os.unlink(self.video_file)
             video_pipeline = (
                 "t. ! queue leaky=downstream ! ffmpegcolorspace ! videorate ! "
-                "vp8enc speed=7 ! webmmux ! filesink location=%s" % save_video)
+                "vp8enc speed=7 ! webmmux streamable=true ! "
+                "filesink append=true location=%s" % self.video_file)
         else:
             video_pipeline = ""
 
@@ -1262,6 +1266,18 @@ class Display:
             self.mainloop_thread.join(10)
             debug("teardown: Exiting (GLib mainloop %s)" % (
                 "is still alive!" if self.mainloop_thread.isAlive() else "ok"))
+        if self.video_file and os.path.isfile(self.video_file):
+            tmp_file = ".seekable.webm"
+            ret = subprocess.call([
+                "ffmpeg", "-y", "-loglevel", "quiet", "-i", self.video_file,
+                "-c", "copy", tmp_file])
+            if ret == 0:
+                os.rename(tmp_file, self.video_file)
+                debug("teardown: Sucessfully regenerated video file header")
+            else:
+                if os.path.isfile(tmp_file):
+                    os.unlink(tmp_file)
+                warn("teardown: Failed to regenerate video file header")
 
 
 class GObjectTimeout:
