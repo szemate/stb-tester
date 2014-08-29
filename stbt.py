@@ -1180,17 +1180,11 @@ class Display:
             opencv_image = gst_to_opencv(gst_buffer)
 
         now = datetime.datetime.now().strftime("%H:%M:%S:%f")[:-4]
-
-        cv2.putText(
-            opencv_image, now, (10, 30), cv2.FONT_HERSHEY_DUPLEX,
-            fontScale=1.0, color=(255, 255, 255))
+        _put_text_on_opencv_image(opencv_image, now, (10, 30))
 
         for i in range(1, len(self.video_debug) + 1):
             text, _, _ = self.video_debug[len(self.video_debug) - i]
-            cv2.putText(
-                opencv_image, text, (10, (i + 1) * 30),
-                cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0,
-                color=(255, 255, 255))
+            _put_text_on_opencv_image(opencv_image, text, (10, (i + 1) * 30))
 
         newbuf = gst.Buffer(opencv_image.data)
         newbuf.set_caps(gst_buffer.get_caps())
@@ -1287,6 +1281,18 @@ def gst_to_opencv(gst_buffer):
          3),
         buffer=gst_buffer.data,
         dtype=numpy.uint8)
+
+
+def _put_text_on_opencv_image(img, text, origin):
+    (width, height), _ = cv2.getTextSize(
+        text, fontFace=cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0, thickness=1)
+    cv2.rectangle(
+        img, origin, (origin[0] + width, origin[1] - height),
+        thickness=-1,  # filled
+        color=(0, 0, 0))
+    cv2.putText(
+        img, text, origin, cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0,
+        color=(255, 255, 255))
 
 
 def _match(image, template, match_parameters, template_name):
