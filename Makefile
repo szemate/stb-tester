@@ -31,16 +31,19 @@ generate_version := $(shell \
 	{ cmp VERSION.now VERSION 2>/dev/null || mv VERSION.now VERSION; }; \
 	rm -f VERSION.now)
 VERSION?=$(shell cat VERSION)
+ESCAPED_VERSION=$(subst -,_,$(VERSION))
 
 .DELETE_ON_ERROR:
 
 
 all: stbt stbt.1 defaults.conf
 
-stbt: stbt.in .stbt-prefix VERSION
+extra/stb-tester.spec stbt: % : %.in .stbt-prefix VERSION
 	sed -e 's,@VERSION@,$(VERSION),g' \
+	    -e 's,@ESCAPED_VERSION@,$(ESCAPED_VERSION),g' \
 	    -e 's,@LIBEXECDIR@,$(libexecdir),g' \
-	    -e 's,@SYSCONFDIR@,$(sysconfdir),g' $< > $@
+	    -e 's,@SYSCONFDIR@,$(sysconfdir),g' \
+	     $< > $@
 
 defaults.conf: stbt.conf .stbt-prefix
 	perl -lpe \
@@ -132,13 +135,13 @@ parallel := $(shell \
     parallel --version 2>/dev/null | grep -q GNU && \
     echo parallel --gnu || echo xargs)
 
-stb-tester.rpm: extra/stb-tester.spec dist
-	mkdir -p $(rpm_source_dir)
-	mv stb-tester-$(VERSION).tar.gz $(rpm_source_dir)
-	rpmbuild --define "_topdir $(rpm_topdir)" -bb "$<"
-rpm_topdir := $(HOME)/rpmbuild
-rpm_source_dir := $(rpm_topdir)/SOURCES
-rpm_target_dir := $(rpm_topdir)/RPMS
+rpm_topdir?=$(HOME)/rpmbuild
+
+rpm: stb-tester-$(VERSION).tar.gz extra/stb-tester.spec
+	@printf "\n*** Building Fedora src rpm ***\n"
+	mkdir -p $(rpm_topdir)/SOURCES
+	cp stb-tester-$(VERSION).tar.gz $(rpm_topdir)/SOURCES
+	rpmbuild --define "_topdir $(rpm_topdir)" -bb extra/stb-tester.spec
 
 # Can only be run from within a git clone of stb-tester or VERSION (and the
 # list of files) won't be set correctly.
@@ -168,6 +171,6 @@ sq = $(subst ','\'',$(1)) # function to escape single quotes (')
 TAGS:
 	etags *.py
 
-.PHONY: all clean check dist doc install uninstall
+.PHONY: all clean check dist doc install uninstall rpm
 .PHONY: check-bashcompletion check-integrationtests check-nosetests check-pylint
 .PHONY: FORCE TAGS
