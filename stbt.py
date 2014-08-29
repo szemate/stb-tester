@@ -1287,12 +1287,13 @@ def _put_text_on_opencv_image(img, text, origin):
     (width, height), _ = cv2.getTextSize(
         text, fontFace=cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0, thickness=1)
     cv2.rectangle(
-        img, origin, (origin[0] + width, origin[1] - height),
+        img, (origin[0] - 5, origin[1] + 5),
+        (origin[0] + width + 5, origin[1] - height - 5),
         thickness=-1,  # filled
         color=(0, 0, 0))
     cv2.putText(
-        img, text, origin, cv2.FONT_HERSHEY_DUPLEX, fontScale=1.0,
-        color=(255, 255, 255))
+        img, text, origin, cv2.FONT_HERSHEY_DUPLEX,
+        fontScale=1.0, color=(255, 255, 255))
 
 
 def _match(image, template, match_parameters, template_name):
