@@ -1271,7 +1271,9 @@ class Display:
             debug("teardown: Exiting (GLib mainloop %s)" % (
                 "is still alive!" if self.mainloop_thread.isAlive() else "ok"))
         if self.video_file and os.path.isfile(self.video_file):
-            tmp_file = ".seekable.webm"
+            tmp_file = os.path.join(
+                os.path.dirname(self.video_file),
+                ".%s.seekable.webm" % os.path.basename(self.video_file))
             ret = subprocess.call([
                 "ffmpeg", "-y", "-loglevel", "quiet", "-i", self.video_file,
                 "-c", "copy", tmp_file])
